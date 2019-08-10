@@ -91,9 +91,9 @@ if DISABLE_EMBEDDED_CRYPTOPP:
             break
 
     if not libraries:
-        print "Did not locate libcryptopp in the usual places."
-        print "Adding /usr/local/{include,lib} and -lcryptopp in the hopes"
-        print "that they will work."
+        print("Did not locate libcryptopp in the usual places.")
+        print("Adding /usr/local/{include,lib} and -lcryptopp in the hopes")
+        print("that they will work.")
 
         # Note that when using cygwin build tools (including gcc) to build
         # Windows-native binaries, the os.path.exists() will not see the
@@ -191,13 +191,13 @@ data_fnames=['COPYING.GPL', 'COPYING.TGPPL.rst', 'COPYING.MIT.txt', 'COPYING.SPL
 
 readmetext = open('README.rst').read()
 if readmetext[:3] == '\xef\xbb\xbf':
-    # utf-8 "BOM" 
+    # utf-8 "BOM"
     readmetext = readmetext[3:]
 
-try:
-    readmetext = readmetext.decode('utf-8')
-except UnicodeDecodeError:
-    pass
+#try:
+#    readmetext = bytes(readmetext.decode('utf-8')
+#except UnicodeDecodeError:
+#    pass
 
 # In case we are building for a .deb with stdeb's sdist_dsc command, we put the
 # docs in "share/doc/pycryptopp".
@@ -219,14 +219,14 @@ CPP_GIT_VERSION_BODY = '''
 '''
 
 def get_normalized_version(versions):
-    pieces = versions['version'].split("-")
+    pieces = versions['version'].split("-".encode())
 
 # examples: versions:  {'version': '2.3.4-dirty', 'full': '5ebdca46cf83a185710ecb9b29d46ec8ac70de61-dirty'}
 # examples versions:  {'version': '0.5.29-108-g5ebdca4-dirty', 'full': '5ebdca46cf83a185710ecb9b29d46ec8ac70de61-dirty'}
 # examples: pieces: ['0.5.29', '108', 'g5ebdca4', 'dirty']
 # examples: pieces: ['2.3.4', 'dirty']
 # examples: pieces: ['2.3.4']
-    
+
     normalized_version = []
     normalized_version.append(pieces.pop(0))
 
@@ -235,9 +235,9 @@ def get_normalized_version(versions):
 
     while len(pieces) > 0:
         nextpiece = pieces.pop(0)
-        if re.match('\d+$', nextpiece):
+        if re.match('\d+$'.encode(), nextpiece):
             postrelease = nextpiece
-        elif nextpiece.startswith('g'):
+        elif nextpiece.startswith('g'.encode()):
             continue
             # Use the full version instead ,below
         elif nextpiece == 'dirty':
@@ -252,12 +252,12 @@ def get_normalized_version(versions):
             postrelease = str(int(postrelease) + 1)
 
     if postrelease is not None:
-        normalized_version.append('.post'+postrelease)
+        normalized_version.append('.post'.encode()+postrelease)
 
     if dev:
         normalized_version.append('.dev0')
 
-    return ''.join(normalized_version)
+    return ''.encode().join(normalized_version)
 
 def read_version_py(infname):
     try:
@@ -322,16 +322,16 @@ class UpdateVersion(object):
 
     def write_version_py(self, pkgname, version, outfname, body, EXE_NAME):
         f = open(outfname, "wb+")
-        f.write(body % {
-                'versiontool': EXE_NAME,
-                'pkgversion': version,
-                'pkgname': pkgname,
-                })
+        body = body.replace("versiontool",f'{EXE_NAME}').replace("pkgversion", f'{version}').replace("pkgname", f'{pkgname}')
+        print(f'body:{body}')
+        f.write(body.encode())
         f.close()
 
     def write_extraversion_h(self, pkgname, version, outfname, body):
         f = open(outfname, "wb")
-        f.write(body % {"pkgname": pkgname, "pkgversion": version})
+        body=body.replace("pkgname", f'{pkgname}').replace("pkgversion", f'{version}')
+        print(f'body:{body}')
+        f.write(body.encode())
         f.close()
 
     def read_extraversion_h(self, infname):
@@ -391,7 +391,7 @@ commands["bench"] = Bench
 
 def _setup(longdescription):
     setup(name=PKG,
-          version=version,
+          version=str(version),
           description='Python wrappers for a few algorithms from the Crypto++ library',
           long_description=longdescription,
           author='Zooko Wilcox',
