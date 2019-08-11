@@ -134,7 +134,6 @@ SHA256_init(PyObject* self, PyObject *args, PyObject *kwdict) {
 
 static PyTypeObject SHA256_type = {
     PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
     "_sha256.SHA256", /*tp_name*/
     sizeof(SHA256),             /*tp_basicsize*/
     0,                         /*tp_itemsize*/

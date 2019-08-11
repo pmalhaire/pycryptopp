@@ -137,7 +137,6 @@ AES_init(PyObject* self, PyObject *args, PyObject *kwdict) {
 
 static PyTypeObject AES_type = {
     PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
     "_aes.AES", /*tp_name*/
     sizeof(AES),             /*tp_basicsize*/
     0,                         /*tp_itemsize*/
