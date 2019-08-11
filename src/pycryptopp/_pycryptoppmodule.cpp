@@ -39,9 +39,21 @@ PyMODINIT_FUNC
 init_pycryptopp(void) {
     PyObject *module;
 
-    module = Py_InitModule3("_pycryptopp", _pycryptopp_functions, _pycryptopp__doc__);
+    static struct PyModuleDef ModuleDef = {
+      PyModuleDef_HEAD_INIT,
+      "_pycryptopp",
+      _pycryptopp__doc__,
+      -1,
+      _pycryptopp_functions,
+      NULL,
+      NULL,
+      NULL,
+      NULL
+    };
+
+    module = PyModule_Create(&ModuleDef);
     if (!module)
-      return;
+      return NULL;
 
     PyObject* version;
 
@@ -61,7 +73,7 @@ init_pycryptopp(void) {
 
     int succ = PyModule_AddObject(module, "cryptopp_version", version);
     if (succ != 0)
-        return;
+        return NULL;
 
 
     init_ecdsa(module);

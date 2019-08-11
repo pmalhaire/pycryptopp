@@ -52,7 +52,7 @@ static void
 VerifyingKey_dealloc(VerifyingKey* self) {
     if (self->k)
         delete self->k;
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static PyObject *
@@ -161,7 +161,7 @@ static void
 SigningKey_dealloc(SigningKey* self) {
     if (self->k)
         delete self->k;
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static PyObject *

@@ -125,7 +125,7 @@ static void
 VerifyingKey_dealloc(VerifyingKey* self) {
     if (self->k)
         delete self->k;
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static PyObject *
@@ -227,7 +227,7 @@ static void
 SigningKey_dealloc(SigningKey* self) {
     if (self->k)
         delete self->k;
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static const char* TAG_AND_SALT = "102:pycryptopp v0.5.3 key derivation algorithm using SHA-256 hash to generate ECDSA 256-bit secret exponents," \

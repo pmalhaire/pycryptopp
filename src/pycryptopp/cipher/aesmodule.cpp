@@ -100,7 +100,7 @@ static void
 AES_dealloc(PyObject* self) {
     if (reinterpret_cast<AES*>(self)->e)
         delete reinterpret_cast<AES*>(self)->e;
-    self->ob_type->tp_free(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 static int

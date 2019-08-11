@@ -116,7 +116,7 @@ static void
 SHA256_dealloc(SHA256* self) {
     Py_XDECREF(self->digest);
     delete self->h;
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int

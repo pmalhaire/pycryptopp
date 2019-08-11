@@ -81,7 +81,7 @@ static PyObject* XSalsa20_new(PyTypeObject* type, PyObject *args, PyObject *kwdi
 static void XSalsa20_dealloc(PyObject* self) {
 	if (reinterpret_cast<XSalsa20*>(self)->e)
 		delete reinterpret_cast<XSalsa20*>(self)->e;
-	self->ob_type->tp_free(self);
+	Py_TYPE(self)->tp_free(self);
 }
 
 static int XSalsa20_init(PyObject* self, PyObject *args, PyObject *kwdict) {
