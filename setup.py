@@ -301,6 +301,9 @@ class UpdateVersion(object):
         # Let's avoid touching the change time (ctime) on the files unless
         # they actually need to be updated.
 
+        version=version.decode()
+
+        # print(f'VERSION{version}')
         if self.read_extraversion_h(EXTRAVERSION_H_FNAME) != version:
             self.write_extraversion_h(
                 PKG,
@@ -317,22 +320,19 @@ class UpdateVersion(object):
                 VERSION_BODY,
                 "pycryptopp's setup.py"
                 )
-
         return version
 
     def write_version_py(self, pkgname, version, outfname, body, EXE_NAME):
         f = open(outfname, "wb+")
-        version=version.decode()
         body = body.replace("%(versiontool)s",f'{EXE_NAME}').replace("%(pkgversion)s", f'{version}').replace("%(pkgname)s", f'{pkgname}')
-        print(f'body:{body}')
+        # print(f'body:{body}')
         f.write(body.encode())
         f.close()
 
     def write_extraversion_h(self, pkgname, version, outfname, body):
         f = open(outfname, "wb")
-        version=version.decode()
         body=body.replace("%(pkgname)s", f'{pkgname}').replace("%(pkgversion)s", f'{version}')
-        print(f'body:{body}')
+        # print(f'body:{body}')
         f.write(body.encode())
         f.close()
 
