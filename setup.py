@@ -322,14 +322,16 @@ class UpdateVersion(object):
 
     def write_version_py(self, pkgname, version, outfname, body, EXE_NAME):
         f = open(outfname, "wb+")
-        body = body.replace("versiontool",f'{EXE_NAME}').replace("pkgversion", f'{version}').replace("pkgname", f'{pkgname}')
+        version=version.decode()
+        body = body.replace("%(versiontool)s",f'{EXE_NAME}').replace("%(pkgversion)s", f'{version}').replace("%(pkgname)s", f'{pkgname}')
         print(f'body:{body}')
         f.write(body.encode())
         f.close()
 
     def write_extraversion_h(self, pkgname, version, outfname, body):
         f = open(outfname, "wb")
-        body=body.replace("pkgname", f'{pkgname}').replace("pkgversion", f'{version}')
+        version=version.decode()
+        body=body.replace("%(pkgname)s", f'{pkgname}').replace("%(pkgversion)s", f'{version}')
         print(f'body:{body}')
         f.write(body.encode())
         f.close()
