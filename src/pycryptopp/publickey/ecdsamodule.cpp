@@ -156,12 +156,12 @@ VerifyingKey_serialize(VerifyingKey *self, PyObject *dummy) {
     const DL_GroupParameters_EC<ECP>& params = pubkey->GetKey().GetGroupParameters();
 
     Py_ssize_t len = params.GetEncodedElementSize(true);
-    PyObject* result = PyString_FromStringAndSize(NULL, len);
+    PyObject* result = PyBytes_FromStringAndSize(NULL, len);
     if (!result)
         return NULL;
 
     params.EncodeElement(true, pubkey->GetKey().GetPublicElement(),
-                         reinterpret_cast<byte*>(PyString_AS_STRING(result)));
+                         reinterpret_cast<byte*>(PyBytes_AS_STRING(result)));
 
     return result;
 }
@@ -397,13 +397,13 @@ static PyObject *
 SigningKey_sign(SigningKey *self, PyObject *msgobj) {
     const char *msg;
     Py_ssize_t msgsize;
-    PyString_AsStringAndSize(msgobj, const_cast<char**>(&msg), reinterpret_cast<Py_ssize_t*>(&msgsize));
+    PyBytes_AsStringAndSize(msgobj, const_cast<char**>(&msg), reinterpret_cast<Py_ssize_t*>(&msgsize));
     assert (msgsize >= 0);
 
     Py_ssize_t sigsize;
     sigsize = self->k->SignatureLength();
 
-    PyStringObject* result = reinterpret_cast<PyStringObject*>(PyString_FromStringAndSize(NULL, sigsize));
+    PyBytesObject* result = reinterpret_cast<PyBytesObject*>(PyBytes_FromStringAndSize(NULL, sigsize));
     if (!result)
         return NULL;
     assert (sigsize >= 0);
@@ -416,7 +416,7 @@ SigningKey_sign(SigningKey *self, PyObject *msgobj) {
             randpool,
             reinterpret_cast<const byte*>(msg),
             msgsize,
-            reinterpret_cast<byte*>(PyString_AS_STRING(result)));
+            reinterpret_cast<byte*>(PyBytes_AS_STRING(result)));
     } catch (InvalidDataFormat le) {
         Py_DECREF(result);
         return PyErr_Format(ecdsa_error, "Signing key was corrupted.  Crypto++ gave this exception: %s", le.what());

@@ -55,10 +55,10 @@ way, and 'nonce' is a value that is guaranteed to never repeat.\
 
 static PyObject *
 AES_process(AES* self, PyObject* msgobj) {
-    if (!PyString_CheckExact(msgobj)) {
-        PyStringObject* typerepr = reinterpret_cast<PyStringObject*>(PyObject_Repr(reinterpret_cast<PyObject*>(msgobj->ob_type)));
+    if (!PyBytes_CheckExact(msgobj)) {
+        PyBytesObject* typerepr = reinterpret_cast<PyBytesObject*>(PyObject_Repr(reinterpret_cast<PyObject*>(msgobj->ob_type)));
         if (typerepr) {
-            PyErr_Format(aes_error, "Precondition violation: you are required to pass a Python string object (not a unicode, a subclass of string, or anything else), but you passed %s.", PyString_AS_STRING(reinterpret_cast<PyObject*>(typerepr)));
+            PyErr_Format(aes_error, "Precondition violation: you are required to pass a Python string object (not a unicode, a subclass of string, or anything else), but you passed %s.", PyBytes_AS_STRING(reinterpret_cast<PyObject*>(typerepr)));
             Py_DECREF(typerepr);
         } else
             PyErr_Format(aes_error, "Precondition violation: you are required to pass a Python string object (not a unicode, a subclass of string, or anything else).");
@@ -67,15 +67,15 @@ AES_process(AES* self, PyObject* msgobj) {
 
     const char *msg;
     Py_ssize_t msgsize;
-    if (PyString_AsStringAndSize(msgobj, const_cast<char**>(&msg), &msgsize))
+    if (PyBytes_AsStringAndSize(msgobj, const_cast<char**>(&msg), &msgsize))
         return NULL;
     assert (msgsize >= 0);
 
-    PyStringObject* result = reinterpret_cast<PyStringObject*>(PyString_FromStringAndSize(NULL, msgsize));
+    PyBytesObject* result = reinterpret_cast<PyBytesObject*>(PyBytes_FromStringAndSize(NULL, msgsize));
     if (!result)
         return NULL;
 
-    self->e->ProcessData(reinterpret_cast<byte*>(PyString_AS_STRING(result)), reinterpret_cast<const byte*>(msg), msgsize);
+    self->e->ProcessData(reinterpret_cast<byte*>(PyBytes_AS_STRING(result)), reinterpret_cast<const byte*>(msg), msgsize);
     return reinterpret_cast<PyObject*>(result);
 }
 

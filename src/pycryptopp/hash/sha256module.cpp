@@ -30,7 +30,7 @@ typedef struct {
 
     /* internal */
     CryptoPP::SHA256* h;
-    PyStringObject* digest;
+    PyBytesObject* digest;
 } SHA256;
 
 PyDoc_STRVAR(SHA256__doc__,
@@ -45,7 +45,7 @@ SHA256_update(SHA256* self, PyObject* msgobj) {
 
     const char *msg;
     Py_ssize_t msgsize;
-    if (PyString_AsStringAndSize(msgobj, const_cast<char**>(&msg), &msgsize))
+    if (PyBytes_AsStringAndSize(msgobj, const_cast<char**>(&msg), &msgsize))
         return NULL;
     self->h->Update(reinterpret_cast<const byte*>(msg), msgsize);
     Py_RETURN_NONE;
@@ -59,10 +59,10 @@ static PyObject *
 SHA256_digest(SHA256* self, PyObject* dummy) {
     if (!self->digest) {
         assert (self->h);
-        self->digest = reinterpret_cast<PyStringObject*>(PyString_FromStringAndSize(NULL, self->h->DigestSize()));
+        self->digest = reinterpret_cast<PyBytesObject*>(PyBytes_FromStringAndSize(NULL, self->h->DigestSize()));
         if (!self->digest)
             return NULL;
-        self->h->Final(reinterpret_cast<byte*>(PyString_AS_STRING(self->digest)));
+        self->h->Final(reinterpret_cast<byte*>(PyBytes_AS_STRING(self->digest)));
     }
 
     Py_INCREF(self->digest);
@@ -78,12 +78,12 @@ SHA256_hexdigest(SHA256* self, PyObject* dummy) {
     PyObject* digest = SHA256_digest(self, NULL);
     if (!digest)
         return NULL;
-    Py_ssize_t dsize = PyString_GET_SIZE(digest);
-    PyStringObject* hexdigest = reinterpret_cast<PyStringObject*>(PyString_FromStringAndSize(NULL, dsize*2));
-    CryptoPP::ArraySink* as = new CryptoPP::ArraySink(reinterpret_cast<byte*>(PyString_AS_STRING(hexdigest)), dsize*2);
+    Py_ssize_t dsize = PyBytes_GET_SIZE(digest);
+    PyBytesObject* hexdigest = reinterpret_cast<PyBytesObject*>(PyBytes_FromStringAndSize(NULL, dsize*2));
+    CryptoPP::ArraySink* as = new CryptoPP::ArraySink(reinterpret_cast<byte*>(PyBytes_AS_STRING(hexdigest)), dsize*2);
     CryptoPP::HexEncoder enc;
     enc.Attach(as);
-    enc.Put(reinterpret_cast<const byte*>(PyString_AS_STRING(digest)), static_cast<size_t>(dsize));
+    enc.Put(reinterpret_cast<const byte*>(PyBytes_AS_STRING(digest)), static_cast<size_t>(dsize));
     Py_DECREF(digest); digest = NULL;
 
     return reinterpret_cast<PyObject*>(hexdigest);

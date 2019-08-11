@@ -88,7 +88,7 @@ VerifyingKey_serialize(VerifyingKey *self, PyObject *dummy) {
     std::string outstr;
     StringSink ss(outstr);
     self->k->DEREncode(ss);
-    PyStringObject* result = reinterpret_cast<PyStringObject*>(PyString_FromStringAndSize(outstr.c_str(), outstr.size()));
+    PyBytesObject* result = reinterpret_cast<PyBytesObject*>(PyBytes_FromStringAndSize(outstr.c_str(), outstr.size()));
     if (!result)
         return NULL;
 
@@ -168,11 +168,11 @@ static PyObject *
 SigningKey_sign(SigningKey *self, PyObject *msgobj) {
     const char *msg;
     Py_ssize_t msgsize;
-    PyString_AsStringAndSize(msgobj, const_cast<char**>(&msg), reinterpret_cast<Py_ssize_t*>(&msgsize));
+    PyBytes_AsStringAndSize(msgobj, const_cast<char**>(&msg), reinterpret_cast<Py_ssize_t*>(&msgsize));
     assert (msgsize >= 0);
 
     Py_ssize_t sigsize = self->k->SignatureLength();
-    PyStringObject* result = reinterpret_cast<PyStringObject*>(PyString_FromStringAndSize(NULL, sigsize));
+    PyBytesObject* result = reinterpret_cast<PyBytesObject*>(PyBytes_FromStringAndSize(NULL, sigsize));
     if (!result)
         return NULL;
     assert (sigsize >= 0);
@@ -182,7 +182,7 @@ SigningKey_sign(SigningKey *self, PyObject *msgobj) {
         randpool,
         reinterpret_cast<const byte*>(msg),
         msgsize,
-        reinterpret_cast<byte*>(PyString_AS_STRING(result)));
+        reinterpret_cast<byte*>(PyBytes_AS_STRING(result)));
     if (siglengthwritten < sigsize)
         fprintf(stderr, "%s: %d: %s: %s", __FILE__, __LINE__, "SigningKey_sign", "INTERNAL ERROR: signature was shorter than expected.");
     else if (siglengthwritten > sigsize) {
@@ -217,7 +217,7 @@ SigningKey_serialize(SigningKey *self, PyObject *dummy) {
     std::string outstr;
     StringSink ss(outstr);
     self->k->DEREncode(ss);
-    PyStringObject* result = reinterpret_cast<PyStringObject*>(PyString_FromStringAndSize(outstr.c_str(), outstr.size()));
+    PyBytesObject* result = reinterpret_cast<PyBytesObject*>(PyBytes_FromStringAndSize(outstr.c_str(), outstr.size()));
     if (!result)
         return NULL;
 
