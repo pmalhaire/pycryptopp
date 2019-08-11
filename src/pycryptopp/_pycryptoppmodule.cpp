@@ -32,23 +32,21 @@ static PyMethodDef _pycryptopp_functions[] = {
     {NULL, NULL, 0, NULL}  /* sentinel */
 };
 
+static struct PyModuleDef ModuleDef = {
+  PyModuleDef_HEAD_INIT,
+  "_pycryptopp",
+  _pycryptopp__doc__,
+  0,
+  _pycryptopp_functions,
+  NULL,
+  NULL,
+  NULL,
+  NULL
+};
+
 PyMODINIT_FUNC PyInit__pycryptopp(void)
 {
-    PyObject *module;
-
-    static struct PyModuleDef ModuleDef = {
-      PyModuleDef_HEAD_INIT,
-      "_pycryptopp",
-      _pycryptopp__doc__,
-      -1,
-      _pycryptopp_functions,
-      NULL,
-      NULL,
-      NULL,
-      NULL
-    };
-
-    module = PyModule_Create(&ModuleDef);
+    PyObject *module = PyModule_Create(&ModuleDef);
     if (!module)
       return NULL;
 
