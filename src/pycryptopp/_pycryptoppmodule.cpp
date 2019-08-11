@@ -32,11 +32,8 @@ static PyMethodDef _pycryptopp_functions[] = {
     {NULL, NULL, 0, NULL}  /* sentinel */
 };
 
-#ifndef PyMODINIT_FUNC /* declarations for DLL import/export */
-#define PyMODINIT_FUNC void
-#endif
-PyMODINIT_FUNC
-init_pycryptopp(void) {
+PyMODINIT_FUNC PyInit__pycryptopp(void)
+{
     PyObject *module;
 
     static struct PyModuleDef ModuleDef = {
@@ -81,4 +78,5 @@ init_pycryptopp(void) {
     init_sha256(module);
     init_aes(module);
     init_xsalsa20(module);
+    return module;
 }
