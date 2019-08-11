@@ -37,7 +37,7 @@ static struct PyModuleDef ModuleDef = {
   PyModuleDef_HEAD_INIT,
   "_pycryptopp",
   _pycryptopp__doc__,
-  0,
+  -1,
   _pycryptopp_functions,
   NULL,
   NULL,
