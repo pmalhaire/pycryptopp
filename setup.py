@@ -135,9 +135,7 @@ trove_classifiers=[
     "Programming Language :: C",
     "Programming Language :: C++",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 2",
-    "Programming Language :: Python :: 2.6",
-    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3.7",
     "Topic :: Software Development :: Libraries",
     ]
 
@@ -153,7 +151,7 @@ if BUILD_DOUBLE_LOAD_TESTER:
     srcs.append('_doubleloadtester.cpp', )
 
 ext_modules.append(
-    Extension('pycryptopp._pycryptopp', extra_srcs + srcs, include_dirs=include_dirs, library_dirs=library_dirs, libraries=libraries, extra_link_args=extra_link_args, extra_compile_args=extra_compile_args, define_macros=define_macros, undef_macros=undef_macros)
+    Extension('_pycryptopp', extra_srcs + srcs, include_dirs=include_dirs, library_dirs=library_dirs, libraries=libraries, extra_link_args=extra_link_args, extra_compile_args=extra_compile_args, define_macros=define_macros, undef_macros=undef_macros)
     )
 
 # python-ed25519

@@ -121,7 +121,7 @@ static int XSalsa20_init(PyObject* self, PyObject *args, PyObject *kwdict) {
 
 
 static PyTypeObject XSalsa20_type = {
-	PyObject_HEAD_INIT(NULL)
+	PyVarObject_HEAD_INIT(NULL, 0)
 	"_xsalsa.XSalsa20",        /*tp_name*/
 	sizeof(XSalsa20),	 /*tp_basicsize*/
 	0,                       /*tp_itemsize*/

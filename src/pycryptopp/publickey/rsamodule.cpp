@@ -106,7 +106,7 @@ static PyMethodDef VerifyingKey_methods[] = {
 };
 
 static PyTypeObject VerifyingKey_type = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "_rsa.VerifyingKey", /*tp_name*/
     sizeof(VerifyingKey),             /*tp_basicsize*/
     0,                         /*tp_itemsize*/
@@ -235,7 +235,7 @@ static PyMethodDef SigningKey_methods[] = {
 };
 
 static PyTypeObject SigningKey_type = {
-    PyObject_HEAD_INIT(NULL)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "_rsa.SigningKey", /*tp_name*/
     sizeof(SigningKey),             /*tp_basicsize*/
     0,                         /*tp_itemsize*/
